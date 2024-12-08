@@ -83,7 +83,7 @@ jobs:
         run: >-
           docker run --name test-container -d --privileged
           -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
-          ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
 
       - name: Verify Ansible is accessible in the built image.
         run: docker exec --tty test-container env TERM=xterm ansible --version
