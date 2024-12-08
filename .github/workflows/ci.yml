@@ -28,40 +28,52 @@ jobs:
       matrix:
         dockerfile:
           - name: archlinux
-            docker_repo: warpcode/molecule-archlinux
+            docker_user: warpcode
+            docker_repo: molecule-archlinux
             version: latest
           - name: debian
-            docker_repo: warpcode/molecule-debian
+            docker_user: warpcode
+            docker_repo: molecule-debian
             version: stable
           - name: debian
-            docker_repo: warpcode/molecule-debian
+            docker_user: warpcode
+            docker_repo: molecule-debian
             version: unstable
           - name: debian
-            docker_repo: warpcode/molecule-debian
+            docker_user: warpcode
+            docker_repo: molecule-debian
             version: 12
           - name: debian
-            docker_repo: warpcode/molecule-debian
+            docker_user: warpcode
+            docker_repo: molecule-debian
             version: 11
           - name: fedora
-            docker_repo: warpcode/molecule-fedora
+            docker_user: warpcode
+            docker_repo: molecule-fedora
             version: latest
           - name: fedora
-            docker_repo: warpcode/molecule-fedora
+            docker_user: warpcode
+            docker_repo: molecule-fedora
             version: 41
           - name: fedora
-            docker_repo: warpcode/molecule-fedora
+            docker_user: warpcode
+            docker_repo: molecule-fedora
             version: 40
           - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
+            docker_user: warpcode
+            docker_repo: molecule-ubuntu
             version: latest
           - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
+            docker_user: warpcode
+            docker_repo: molecule-ubuntu
             version: 24.04
           - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
+            docker_user: warpcode
+            docker_repo: molecule-ubuntu
             version: 22.04
           - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
+            docker_user: warpcode
+            docker_repo: molecule-ubuntu
             version: 20.04
     steps:
       - uses: actions/checkout@v4
@@ -75,7 +87,8 @@ jobs:
           file: Dockerfile.${{ matrix.dockerfile.name }}
           platforms: linux/amd64
           push: false
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          load: true
+          tags: ${{ matrix.dockerfile.docker_user }}/${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
 
@@ -83,7 +96,7 @@ jobs:
         run: >-
           docker run --name test-container -d --privileged
           -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
-          "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
+          "${{ matrix.dockerfile.docker_user }}/${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
 
       - name: Verify Ansible is accessible in the built image.
         run: docker exec --tty test-container env TERM=xterm ansible --version
