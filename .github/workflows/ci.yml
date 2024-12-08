@@ -32,7 +32,6 @@ jobs:
         dockerfile:
           - name: archlinux
             docker_repo: warpcode/molecule-archlinux
-            platforms: linux/amd64,linux/arm64
             version: latest
     steps:
       - name: Check out the codebase.
@@ -58,7 +57,7 @@ jobs:
           --pull
           -f "Dockerfile.${{ matrix.dockerfile.name }}"
           -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
-          --platform="${{ matrix.dockerfile.platforms }}"
+          --platform="linux/amd64"
           --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
           .
 
