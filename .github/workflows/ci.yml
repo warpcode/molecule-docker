@@ -57,7 +57,7 @@ jobs:
           docker buildx build
           --pull
           -f "Dockerfile.${{ matrix.dockerfile.name }}"
-          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}: "
+          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
           --platform="${{ matrix.dockerfile.platforms }}"
           --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
           .
