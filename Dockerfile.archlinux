@@ -6,10 +6,9 @@ RUN pacman -Sy --noconfirm \
         archlinux-keyring \
         python \
         openssl \
-        su \
         sudo \
         systemd \
-        systemd-cron \
+        util-linux \
     && pacman -Syu --noconfirm
 
 RUN pip install ansible
