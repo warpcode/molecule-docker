@@ -6,8 +6,8 @@ ENV container=docker
 
 RUN dnf -y update \
     && dnf -y install \
-        python3-pip \
         python3-dnf \
+        python3-pip \
         sudo \
         systemd \
         util-linux \

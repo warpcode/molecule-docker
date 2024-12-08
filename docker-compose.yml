@@ -10,6 +10,46 @@ services:
           OS_VERSION: latest
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  debian_stable:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.debian
+      args:
+          OS_VERSION: stable
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  debian_unstable:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.debian
+      args:
+          OS_VERSION: unstable
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  debian_12:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.debian
+      args:
+          OS_VERSION: 12
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  debian_11:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.debian
+      args:
+          OS_VERSION: 11
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
   fedora_latest:
     privileged: true
     cgroup: host
