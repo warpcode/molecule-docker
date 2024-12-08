@@ -10,3 +10,63 @@ services:
           OS_VERSION: latest
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  fedora_latest:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.fedora
+      args:
+          OS_VERSION: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  fedora_41:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.fedora
+      args:
+          OS_VERSION: 41
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  fedora_40:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.fedora
+      args:
+          OS_VERSION: 40
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  ubuntu_latest:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.ubuntu
+      args:
+          OS_VERSION: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  ubuntu_24_04:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.ubuntu
+      args:
+          OS_VERSION: 24.04
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  ubuntu_22_04:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.ubuntu
+      args:
+          OS_VERSION: 22.04
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
