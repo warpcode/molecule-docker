@@ -69,48 +69,47 @@ jobs:
       - uses: docker/setup-buildx-action@v1
 
 test:
-    name: Test
-    runs-on: ubuntu-latest
+  name: Test
+  runs-on: ubuntu-latest
 
-    steps:
-      - uses: actions/checkout@v2
+  steps:
+    - uses: actions/checkout@v2
 
-      - name: Test Build the image.
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: Dockerfile.${{ matrix.dockerfile.name }}
-          platforms: linux/amd64
-          push: false
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
-          build-args: |
-            OS_VERSION=${{ matrix.dockerfile.version }}
+    - name: Test Build the image.
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: Dockerfile.${{ matrix.dockerfile.name }}
+        platforms: linux/amd64
+        push: false
+        tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+        build-args: |
+          OS_VERSION=${{ matrix.dockerfile.version }}
 
-      - name: Run the built image.
-        run: >-
-          docker run --name test-container -d --privileged
-          -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
-          ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+    - name: Run the built image.
+      run: >-
+        docker run --name test-container -d --privileged
+        -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
+        ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
 
-      - name: Verify Ansible is accessible in the built image.
-        run: docker exec --tty test-container env TERM=xterm ansible --version
+    - name: Verify Ansible is accessible in the built image.
+      run: docker exec --tty test-container env TERM=xterm ansible --version
 
+    - name: Login to DockerHub
+      if: github.ref == 'refs/heads/main'
+      uses: docker/login-action@v1
+      with:
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Login to DockerHub
-        if: github.ref == 'refs/heads/main'
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push image.
-        if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: Dockerfile.${{ matrix.dockerfile.name }}
-          platforms: linux/amd64
-          push: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
-          build-args: |
-            OS_VERSION=${{ matrix.dockerfile.version }}
+    - name: Build and push image.
+      if: github.ref == 'refs/heads/main'
+      uses: docker/build-push-action@v2
+      with:
+        context: ./
+        file: Dockerfile.${{ matrix.dockerfile.name }}
+        platforms: linux/amd64
+        push: true
+        tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+        build-args: |
+          OS_VERSION=${{ matrix.dockerfile.version }}
