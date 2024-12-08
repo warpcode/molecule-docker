@@ -1,5 +1,6 @@
 ---
 name: CI
+
 on:
   workflow_dispatch:
   pull_request:
@@ -22,14 +23,14 @@ env:
 
 jobs:
   build:
-    name: Build Test
+    name: Molecule
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         dockerfile:
           - name: archlinux
-            docker_repo: warpcode/molecule-archlinux
+            repo: warpcode.molecule-archlinux
             platforms: linux/amd64,linux/arm64
             version: latest
     steps:
@@ -55,11 +56,11 @@ jobs:
           docker buildx build
           --pull
           -f "Dockerfile.${{ matrix.dockerfile.name }}"
-          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
+          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}: "
           --platform="${{ matrix.dockerfile.name }}"
           --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
           .
-
+      #
       # - name: Check if files were changed in the roles
       #   id: changed-files
       #   uses: tj-actions/changed-files@v45
