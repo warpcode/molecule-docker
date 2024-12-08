@@ -30,6 +30,18 @@ jobs:
           - name: archlinux
             docker_repo: warpcode/molecule-archlinux
             version: latest
+          - name: debian
+            docker_repo: warpcode/molecule-debian
+            version: stable
+          - name: debian
+            docker_repo: warpcode/molecule-debian
+            version: unstable
+          - name: debian
+            docker_repo: warpcode/molecule-debian
+            version: 12
+          - name: debian
+            docker_repo: warpcode/molecule-debian
+            version: 11
           - name: fedora
             docker_repo: warpcode/molecule-fedora
             version: latest
