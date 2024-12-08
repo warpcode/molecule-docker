@@ -1,3 +1,18 @@
 ARG OS_VERSION=latest
 
 FROM archlinux:${OS_VERSION}
+
+RUN pacman -Sy --noconfirm \
+        archlinux-keyring \
+        python \
+        openssl \
+        su \
+        sudo \
+        systemd \
+        systemd-cron
+    && pacman -Syu --noconfirm
+
+RUN pip install ansible
+
+VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
+CMD ["/lib/systemd/systemd"]
