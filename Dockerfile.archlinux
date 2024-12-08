@@ -4,9 +4,9 @@ FROM archlinux:${OS_VERSION}
 
 RUN pacman -Sy --noconfirm \
         archlinux-keyring \
+        openssl \
         python \
         python-pip \
-        openssl \
         sudo \
         systemd \
         util-linux \
