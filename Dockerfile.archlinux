@@ -5,12 +5,20 @@ FROM archlinux:${OS_VERSION}
 RUN pacman -Sy --noconfirm \
         archlinux-keyring \
         python \
+        python-pip \
         openssl \
         sudo \
         systemd \
         util-linux \
     && pacman -Syu --noconfirm
 
+# Fix potential UTF-8 errors with ansible-test.
+RUN locale-gen en_US.UTF-8
+
+# Remove useless Python environment warning flag.
+RUN sudo rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED
+
+# Install ansible
 RUN pip install ansible
 
 # Install Ansible inventory file.
@@ -21,6 +29,10 @@ RUN echo "[local]\nlocalhost ansible_connection=local" > /etc/ansible/hosts
 # multiple containers with Molecule (https://github.com/ansible/molecule/issues/1104)
 RUN rm -f /lib/systemd/system/systemd*udev* \
   && rm -f /lib/systemd/system/getty.target
+
+# Fake initctl to launch services
+COPY initctl_faker .
+RUN chmod +x initctl_faker && rm -fr /sbin/initctl && ln -s /initctl_faker /sbin/initctl
 
 VOLUME ["/sys/fs/cgroup", "/tmp", "/run"]
 CMD ["/lib/systemd/systemd"]

@@ -24,7 +24,7 @@ env:
 
 jobs:
   build:
-    name: Molecule
+    name: Build
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
@@ -38,12 +38,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           path: "warpcode.molecule-docker"
-
-      - name: Install buildx
-        id: buildx
-        uses: crazy-max/ghaction-docker-buildx@v1
-        with:
-          buildx-version: latest
+      - uses: docker/setup-qemu-action@v1
+      - uses: docker/setup-buildx-action@v1
 
       - name: Setup docker buildx
         run: |
@@ -51,51 +47,30 @@ jobs:
           docker buildx use "${WORKING_DIR}"
           docker buildx inspect --bootstrap
 
-      - name: Build the image
-        run: >
-          docker buildx build
-          --pull
-          -f "Dockerfile.${{ matrix.dockerfile.name }}"
-          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
-          --platform="linux/amd64"
-          --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
-          .
+      - name: Test Build the image.
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: Dockerfile.${{ matrix.dockerfile.name }}
+          platforms: linux/amd64
+          push: false
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          build-args:
+            OS_VERSION: ${{ matrix.dockerfile.version }}
 
-      # - name: Check if files were changed in the roles
-      #   id: changed-files
-      #   uses: tj-actions/changed-files@v45
-      #   with:
-      #     path: "warpcode.personal-computer"
-      #     dir_names_max_depth: 2
-      #     dir_names: "true"
-      #     write_output_files: true
-      #     files: |
-      #       roles/**
-      #       molecule/**
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      # - name: Changed Molecule test
-      #   # if: steps.changed-files.outputs.any_modified == 'true'
-      #   run: |
-      #     . venv/bin/activate
-      #     CHANGED=$(cat "../.github/outputs/all_modified_files.txt" | tr " " "\n" | xargs -I {} basename {} | uniq | sort | tr "\n" " ")
-      #     if [ -d "molecule/$SCENARIO" ];then
-      #       if [[ "${{ steps.changed-files.outputs.any_modified }}" == "true" ]];then
-      #           if [[ $CHANGED =~ (^|[[:space:]])${SCENARIO}($|[[:space:]]) ]]; then
-      #             molecule test -s "$SCENARIO"
-      #           else
-      #             echo "No changed files for $SCENARIO: Skipping"
-      #           fi
-      #       else
-      #         molecule test -s "$SCENARIO"
-      #       fi
-      #     else
-      #       echo "No tests for $SCENARIO"
-      #     fi
-      #   env:
-      #     PY_COLORS: "1"
-      #     ANSIBLE_FORCE_COLOR: "1"
-      #     SCENARIO: ${{ matrix.scenario }}
-      #     MOLECULE_NAME: ${{ matrix.distro.host }}
-      #     MOLECULE_DOCKER_IMAGE: ${{ matrix.distro.image }}
-      #     MOLECULE_DOCKER_IMAGE_PREBUILT: ${{ matrix.distro.image_prebuilt }}
-      #     MOLECULE_DOCKER_CMD: ${{ matrix.distro.image_cmd }}
+      - name: Build and push image.
+        uses: docker/build-push-action@v2
+        with:
+          context: ./
+          file: Dockerfile.${{ matrix.dockerfile.name }}
+          platforms: linux/amd64
+          push: true
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          build-args:
+            OS_VERSION: ${{ matrix.dockerfile.version }}

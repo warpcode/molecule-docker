@@ -1,0 +1,12 @@
+---
+services:
+  archlinux_latest:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.archlinux
+      args:
+          OS_VERSION: latest
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
