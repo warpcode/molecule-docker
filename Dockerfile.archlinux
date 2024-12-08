@@ -9,7 +9,7 @@ RUN pacman -Sy --noconfirm \
         su \
         sudo \
         systemd \
-        systemd-cron
+        systemd-cron \
     && pacman -Syu --noconfirm
 
 RUN pip install ansible
