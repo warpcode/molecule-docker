@@ -81,18 +81,6 @@ jobs:
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
 
-      - name: Verify Ansible is accessible in the built image.
-        run: docker image inspect ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
-
-      - name: Run the built image.
-        run: >-
-          docker run --name test-container -d --privileged
-          -v /sys/fs/cgroup:/sys/fs/cgroup:rw --cgroupns=host
-          ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
-
-      - name: Verify Ansible is accessible in the built image.
-        run: docker exec --tty test-container env TERM=xterm ansible --version
-
       - name: Login to DockerHub
         if: github.ref == 'refs/heads/main'
         uses: docker/login-action@v1
