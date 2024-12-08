@@ -59,6 +59,9 @@ jobs:
             version: 24.04
           - name: ubuntu
             docker_repo: warpcode/molecule-ubuntu
+            version: 22.04
+          - name: ubuntu
+            docker_repo: warpcode/molecule-ubuntu
             version: 20.04
     steps:
       - uses: actions/checkout@v4

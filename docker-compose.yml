@@ -110,3 +110,13 @@ services:
           OS_VERSION: 22.04
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
+  ubuntu_20_04:
+    privileged: true
+    cgroup: host
+    build:
+      context: ./
+      dockerfile: ./Dockerfile.ubuntu
+      args:
+          OS_VERSION: 20.04
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:rw
