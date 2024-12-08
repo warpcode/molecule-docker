@@ -30,6 +30,15 @@ jobs:
           - name: archlinux
             docker_repo: warpcode/molecule-archlinux
             version: latest
+          - name: fedora
+            docker_repo: warpcode/molecule-fedora
+            version: latest
+          - name: fedora
+            docker_repo: warpcode/molecule-fedora
+            version: 41
+          - name: fedora
+            docker_repo: warpcode/molecule-fedora
+            version: 40
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v1
