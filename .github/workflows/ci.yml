@@ -10,6 +10,7 @@ on:
     branches:
       - main
     paths:
+      - ".github/workflows/ci.yml"
       - "Dockerfile.*"
   schedule:
     - cron: "0 1 * * 0"
@@ -57,7 +58,7 @@ jobs:
           --pull
           -f "Dockerfile.${{ matrix.dockerfile.name }}"
           -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}: "
-          --platform="${{ matrix.dockerfile.name }}"
+          --platform="${{ matrix.dockerfile.platforms }}"
           --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
           .
       #
