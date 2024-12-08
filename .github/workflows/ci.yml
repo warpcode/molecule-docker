@@ -29,6 +29,7 @@ jobs:
       matrix:
         dockerfile:
           - name: archlinux
+            docker_repo: warpcode/molecule-archlinux
             platforms: linux/amd64,linux/arm64
             version: latest
     steps:
@@ -54,11 +55,11 @@ jobs:
           docker buildx build
           --pull
           -f "Dockerfile.${{ matrix.dockerfile.name }}"
-          -t "warpcode/$$$${DOCKER_DEST_IMAGE}"
+          -t "${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}"
           --platform="${{ matrix.dockerfile.name }}"
           --build-arg OS_VERSION="${{ matrix.dockerfile.version }}"
           .
-      #
+
       # - name: Check if files were changed in the roles
       #   id: changed-files
       #   uses: tj-actions/changed-files@v45
