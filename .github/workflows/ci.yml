@@ -19,9 +19,6 @@ defaults:
   run:
     working-directory: "warpcode.molecule-docker"
 
-env:
-  WORKING_DIR: "warpcode.molecule-docker"
-
 jobs:
   build:
     name: Build
@@ -34,17 +31,14 @@ jobs:
             docker_repo: warpcode/molecule-archlinux
             version: latest
     steps:
-      - name: Check out the codebase.
-        uses: actions/checkout@v4
-        with:
-          path: "warpcode.molecule-docker"
+      - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v1
       - uses: docker/setup-buildx-action@v1
 
       - name: Test Build the image.
         uses: docker/build-push-action@v2
         with:
-          context: ./warpcode.molecule-docker
+          context: ./
           file: Dockerfile.${{ matrix.dockerfile.name }}
           platforms: linux/amd64
           push: false
@@ -61,7 +55,7 @@ jobs:
       - name: Build and push image.
         uses: docker/build-push-action@v2
         with:
-          context: ./warpcode.molecule-docker
+          context: ./
           file: Dockerfile.${{ matrix.dockerfile.name }}
           platforms: linux/amd64
           push: true
