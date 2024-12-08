@@ -13,7 +13,8 @@ on:
       - ".github/workflows/ci.yml"
       - "Dockerfile.*"
   schedule:
-    - cron: "0 1 * * 0"
+    # Run on the first of the month at 7am
+    - cron: "0 7 1 * *"
 
 defaults:
   run:
