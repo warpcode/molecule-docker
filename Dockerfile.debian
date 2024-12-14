@@ -7,7 +7,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies.
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends \
+    && apt-get install -y $([ "$DESKTOP_INSTALL" = "0" ] && echo '--no-install-recommends') \
        build-essential \
        iproute2 \
        libffi-dev \
