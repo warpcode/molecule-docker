@@ -2,6 +2,7 @@ ARG OS_VERSION=latest
 
 FROM ubuntu:${OS_VERSION}
 
+ARG DESKTOP_INSTALL="0"
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies.
@@ -23,6 +24,7 @@ RUN apt-get update \
        sudo \
        systemd \
        systemd-cron \
+       $([ "${DESKTOP_INSTALL}" = "1" ] && echo 'ubuntu-desktop') \
     && apt-get clean \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \

@@ -2,6 +2,8 @@ ARG OS_VERSION=latest
 
 FROM archlinux:${OS_VERSION}
 
+ARG DESKTOP_INSTALL=0
+
 RUN pacman -Sy --noconfirm \
         archlinux-keyring \
         openssl \
@@ -10,6 +12,7 @@ RUN pacman -Sy --noconfirm \
         sudo \
         systemd \
         util-linux \
+       $([ "$DESKTOP_INSTALL" = "1" ] && echo 'gnome') \
     && pacman -Syu --noconfirm \
     && rm -f /lib/systemd/system/systemd*udev* \
     && rm -f /lib/systemd/system/getty.target \

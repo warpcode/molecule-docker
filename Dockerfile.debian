@@ -2,6 +2,7 @@ ARG OS_VERSION=stable
 
 FROM debian:${OS_VERSION}
 
+ARG DESKTOP_INSTALL=0
 ARG DEBIAN_FRONTEND=noninteractive
 
 # Install dependencies.
@@ -21,6 +22,7 @@ RUN apt-get update \
        systemd \
        systemd-sysv \
        wget \
+       $([ "$DESKTOP_INSTALL" = "1" ] && echo 'task-gnome-desktop') \
     && apt-get clean \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \

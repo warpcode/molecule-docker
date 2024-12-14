@@ -64,6 +64,9 @@ jobs:
           - name: ubuntu
             docker_repo: warpcode/molecule-ubuntu
             version: 20.04
+        desktop:
+          - "0"
+          - "1"
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v1
@@ -78,7 +81,7 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && echo '_desktop' }}
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
 
@@ -97,6 +100,6 @@ jobs:
           file: Dockerfile.${{ matrix.dockerfile.name }}
           platforms: linux/amd64
           push: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && echo '_desktop' }}
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
