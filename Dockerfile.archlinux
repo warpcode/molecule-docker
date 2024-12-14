@@ -10,12 +10,12 @@ RUN pacman -Sy --noconfirm \
         python \
         python-pip \
         sudo \
-        systemd \
+        systemd-sysvcompat \
         util-linux \
-       $([ "$DESKTOP_INSTALL" = "1" ] && echo 'gnome') \
+       $([ "$DESKTOP_INSTALL" == "1" ] && echo 'gnome') \
     && pacman -Syu --noconfirm \
-    && rm -f /lib/systemd/system/systemd*udev* \
-    && rm -f /lib/systemd/system/getty.target \
+    && rm -rf /lib/systemd/system/systemd*udev* \
+    && rm -rf /lib/systemd/system/getty.target \
     && rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
     && locale-gen en_US.UTF-8
 
