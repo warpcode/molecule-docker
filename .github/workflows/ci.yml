@@ -24,84 +24,88 @@ jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
-    strategy:
-      fail-fast: false
-      matrix:
-        dockerfile:
-          - name: archlinux
-            docker_repo: warpcode/molecule-archlinux
-            version: latest
-          - name: debian
-            docker_repo: warpcode/molecule-debian
-            version: stable
-          - name: debian
-            docker_repo: warpcode/molecule-debian
-            version: unstable
-          - name: debian
-            docker_repo: warpcode/molecule-debian
-            version: 12
-          - name: debian
-            docker_repo: warpcode/molecule-debian
-            version: 11
-          - name: fedora
-            docker_repo: warpcode/molecule-fedora
-            version: latest
-          - name: fedora
-            docker_repo: warpcode/molecule-fedora
-            version: 41
-          - name: fedora
-            docker_repo: warpcode/molecule-fedora
-            version: 40
-          - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
-            version: latest
-          - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
-            version: 24.04
-          - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
-            version: 22.04
-          - name: ubuntu
-            docker_repo: warpcode/molecule-ubuntu
-            version: 20.04
-        desktop:
-          - "0"
-          - "1"
+    # strategy:
+    #   fail-fast: false
+    #   matrix:
+    #     dockerfile:
+    #       - name: archlinux
+    #         docker_repo: warpcode/molecule-archlinux
+    #         version: latest
+    #       - name: debian
+    #         docker_repo: warpcode/molecule-debian
+    #         version: stable
+    #       - name: debian
+    #         docker_repo: warpcode/molecule-debian
+    #         version: unstable
+    #       - name: debian
+    #         docker_repo: warpcode/molecule-debian
+    #         version: 12
+    #       - name: debian
+    #         docker_repo: warpcode/molecule-debian
+    #         version: 11
+    #       - name: fedora
+    #         docker_repo: warpcode/molecule-fedora
+    #         version: latest
+    #       - name: fedora
+    #         docker_repo: warpcode/molecule-fedora
+    #         version: 41
+    #       - name: fedora
+    #         docker_repo: warpcode/molecule-fedora
+    #         version: 40
+    #       - name: ubuntu
+    #         docker_repo: warpcode/molecule-ubuntu
+    #         version: latest
+    #       - name: ubuntu
+    #         docker_repo: warpcode/molecule-ubuntu
+    #         version: 24.04
+    #       - name: ubuntu
+    #         docker_repo: warpcode/molecule-ubuntu
+    #         version: 22.04
+    #       - name: ubuntu
+    #         docker_repo: warpcode/molecule-ubuntu
+    #         version: 20.04
+    #     desktop:
+    #       - "0"
+    #       - "1"
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v1
       - uses: docker/setup-buildx-action@v1
 
-      - name: Test Build the image.
-        id: test-build-image
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: Dockerfile.${{ matrix.dockerfile.name }}
-          platforms: linux/amd64
-          push: false
-          load: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
-          build-args: |
-            OS_VERSION=${{ matrix.dockerfile.version }}
-            DESKTOP_INSTALL=${{ matrix.desktop }}
+      - name: Build via docker compose
+        run: |
+          docker compose build --no-cache
 
-      - name: Login to DockerHub
-        if: github.ref == 'refs/heads/main'
-        uses: docker/login-action@v1
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Build and push image.
-        if: github.ref == 'refs/heads/main'
-        uses: docker/build-push-action@v2
-        with:
-          context: ./
-          file: Dockerfile.${{ matrix.dockerfile.name }}
-          platforms: linux/amd64
-          push: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
-          build-args: |
-            OS_VERSION=${{ matrix.dockerfile.version }}
-            DESKTOP_INSTALL=${{ matrix.desktop }}
+      # - name: Test Build the image.
+      #   id: test-build-image
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./
+      #     file: Dockerfile.${{ matrix.dockerfile.name }}
+      #     platforms: linux/amd64
+      #     push: false
+      #     load: true
+      #     tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
+      #     build-args: |
+      #       OS_VERSION=${{ matrix.dockerfile.version }}
+      #       DESKTOP_INSTALL=${{ matrix.desktop }}
+      #
+      # - name: Login to DockerHub
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: docker/login-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKERHUB_USERNAME }}
+      #     password: ${{ secrets.DOCKERHUB_TOKEN }}
+      #
+      # - name: Build and push image.
+      #   if: github.ref == 'refs/heads/main'
+      #   uses: docker/build-push-action@v2
+      #   with:
+      #     context: ./
+      #     file: Dockerfile.${{ matrix.dockerfile.name }}
+      #     platforms: linux/amd64
+      #     push: true
+      #     tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
+      #     build-args: |
+      #       OS_VERSION=${{ matrix.dockerfile.version }}
+      #       DESKTOP_INSTALL=${{ matrix.desktop }}
