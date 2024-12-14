@@ -16,7 +16,7 @@ on:
     # Run on the first of the month at 7am
     - cron: "0 7 1 * *"
 
-defaultsjobs:
+jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
