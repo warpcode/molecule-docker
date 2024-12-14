@@ -73,8 +73,9 @@ jobs:
       - uses: docker/setup-buildx-action@v1
 
       - name: Build via docker compose
-        run: |
-          docker compose build --no-cache
+        run: >
+          cd "warpcode.molecule-docker"
+          && docker compose build --no-cache
 
       # - name: Test Build the image.
       #   id: test-build-image
