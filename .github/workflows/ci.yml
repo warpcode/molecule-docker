@@ -77,7 +77,7 @@ jobs:
           platforms: linux/amd64
           push: false
           load: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' || '' }}
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
             DESKTOP_INSTALL=${{ matrix.desktop }}
@@ -97,7 +97,7 @@ jobs:
           file: Dockerfile.${{ matrix.dockerfile.name }}
           platforms: linux/amd64
           push: true
-          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' }}
+          tags: ${{ matrix.dockerfile.docker_repo }}:${{ matrix.dockerfile.version }}${{ matrix.desktop == '1' && '_desktop' || '' }}
           build-args: |
             OS_VERSION=${{ matrix.dockerfile.version }}
             DESKTOP_INSTALL=${{ matrix.desktop }}
