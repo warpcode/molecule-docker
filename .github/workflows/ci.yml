@@ -16,11 +16,7 @@ on:
     # Run on the first of the month at 7am
     - cron: "0 7 1 * *"
 
-defaults:
-  run:
-    working-directory: "warpcode.molecule-docker"
-
-jobs:
+defaultsjobs:
   build:
     name: Build
     runs-on: ubuntu-latest
@@ -74,8 +70,7 @@ jobs:
 
       - name: Build via docker compose
         run: >
-          cd "warpcode.molecule-docker"
-          && docker compose build --no-cache
+          docker compose build --no-cache
 
       # - name: Test Build the image.
       #   id: test-build-image
