@@ -26,7 +26,7 @@ RUN apt-get update \
     && apt-get clean \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
-    && rm -f /lib/systemd/system/multi-user.target.wants/getty.target \
+    && rm -rf /lib/systemd/system/multi-user.target.wants/getty.target \
     && rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
 
 # Install Ansible.

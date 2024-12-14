@@ -5,8 +5,8 @@ FROM fedora:${OS_VERSION}
 ARG DESKTOP_INSTALL=0
 ENV container=docker
 
-RUN dnf -y update \
-    && dnf -y install \
+RUN dnf -y update; \
+    dnf -y install \
         python3-dnf \
         python3-libdnf5 \
         python3-pip \
@@ -14,16 +14,16 @@ RUN dnf -y update \
         systemd \
         util-linux \
         which \
-       $([ "$DESKTOP_INSTALL" = "1" ] && echo '@Basic Desktop') \
+    && ([ "$DESKTOP_INSTALL" = "1" ] && dnf group -y install '@Basic Desktop' || true) \
     && dnf clean all \
     && (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
-    rm -f /lib/systemd/system/multi-user.target.wants/*;\
-    rm -f /etc/systemd/system/*.wants/*;\
-    rm -f /lib/systemd/system/local-fs.target.wants/*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*udev*; \
-    rm -f /lib/systemd/system/sockets.target.wants/*initctl*; \
-    rm -f /lib/systemd/system/basic.target.wants/*;\
-    rm -f /lib/systemd/system/anaconda.target.wants/*;
+    rm -rf /lib/systemd/system/multi-user.target.wants/*;\
+    rm -rf /etc/systemd/system/*.wants/*;\
+    rm -rf /lib/systemd/system/local-fs.target.wants/*; \
+    rm -rf /lib/systemd/system/sockets.target.wants/*udev*; \
+    rm -rf /lib/systemd/system/sockets.target.wants/*initctl*; \
+    rm -rf /lib/systemd/system/basic.target.wants/*;\
+    rm -rf /lib/systemd/system/anaconda.target.wants/*;
 
 # Install ansible
 RUN pip install ansible
