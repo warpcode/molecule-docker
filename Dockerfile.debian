@@ -23,10 +23,11 @@ RUN apt-get update \
        systemd-sysv \
        wget \
        $([ "$DESKTOP_INSTALL" = "1" ] && echo 'task-gnome-desktop') \
-    && apt-get clean \
-    && rm -Rf /var/lib/apt/lists/* \
-    && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
-    && rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \
+    && apt-get clean; \
+    rm -Rf /var/lib/apt/lists/*; \
+    rm -Rf /usr/share/doc; \
+    rm -Rf /usr/share/man; \
+    rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \
     rm -rf /lib/systemd/system/multi-user.target.wants/*;\
     rm -rf /etc/systemd/system/*.wants/*;\
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
