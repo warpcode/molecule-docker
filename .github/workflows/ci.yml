@@ -80,8 +80,8 @@ jobs:
       - name: Test Build the image.
         if: >
           steps.changed-files.outputs.any_modified != 'true'
-          or contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
-          or contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
+          || contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
+          || contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
         id: test-build-image
         uses: docker/build-push-action@v2
         with:
@@ -98,10 +98,10 @@ jobs:
       - name: Login to DockerHub
         if: >
           github.ref == 'refs/heads/main'
-          and (
+          && (
             steps.changed-files.outputs.any_modified != 'true'
-            or contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
-            or contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
+            || contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
+            || contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
           )
         uses: docker/login-action@v1
         with:
@@ -111,10 +111,10 @@ jobs:
       - name: Build and push image.
         if: >
           github.ref == 'refs/heads/main'
-          and (
+          && (
             steps.changed-files.outputs.any_modified != 'true'
-            or contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
-            or contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
+            || contains(steps.changed-files.outputs.modified_files, format('Dockerfile.{0}', matrix.dockerfile.name))
+            || contains(steps.changed-files.outputs.modified_files, 'docker-compose.yml')
           )
         uses: docker/build-push-action@v2
         with:
