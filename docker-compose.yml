@@ -9,7 +9,6 @@ services:
       dockerfile: ./Dockerfile.archlinux
       args:
         OS_VERSION: latest
-        DESKTOP_INSTALL: "1"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
   archlinux_latest_desktop:
@@ -21,6 +20,7 @@ services:
       dockerfile: ./Dockerfile.archlinux
       args:
         OS_VERSION: latest
+        DESKTOP_INSTALL: "1"
     volumes:
       - /sys/fs/cgroup:/sys/fs/cgroup:rw
   debian_stable:
