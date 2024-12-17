@@ -25,6 +25,8 @@ RUN apt-get update \
        systemd \
        systemd-cron \
        $([ "${DESKTOP_INSTALL}" = "1" ] && echo 'ubuntu-desktop') \
+    && apt-get remove \
+        snapd \
     && apt-get clean \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
