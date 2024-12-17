@@ -23,7 +23,9 @@ RUN dnf -y update; \
     rm -rf /lib/systemd/system/sockets.target.wants/*udev*; \
     rm -rf /lib/systemd/system/sockets.target.wants/*initctl*; \
     rm -rf /lib/systemd/system/basic.target.wants/*;\
-    rm -rf /lib/systemd/system/anaconda.target.wants/*;
+    rm -rf /lib/systemd/system/anaconda.target.wants/*; \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop lightdm.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable lightdm.service || true);
 
 # Install ansible
 RUN pip install ansible

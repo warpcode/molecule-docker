@@ -27,7 +27,9 @@ RUN apt-get update \
     && rm -Rf /var/lib/apt/lists/* \
     && rm -Rf /usr/share/doc && rm -Rf /usr/share/man \
     && rm -rf /lib/systemd/system/multi-user.target.wants/getty.target \
-    && rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED
+    && rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true);
 
 # Install Ansible.
 RUN pip3 install --upgrade pip

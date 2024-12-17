@@ -4,20 +4,22 @@ FROM archlinux:${OS_VERSION}
 
 ARG DESKTOP_INSTALL=0
 
-RUN pacman -Sy --noconfirm \
+RUN pacman-key --init \
+    && pacman -Sy --noconfirm --disable-sandbox \
         archlinux-keyring \
         openssl \
         python \
         python-pip \
         sudo \
-        systemd-sysvcompat \
+        systemd \
         util-linux \
        $([ "$DESKTOP_INSTALL" == "1" ] && echo 'gnome') \
-    && pacman -Syu --noconfirm \
     && rm -rf /lib/systemd/system/systemd*udev* \
     && rm -rf /lib/systemd/system/getty.target \
     && rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
-    && locale-gen en_US.UTF-8
+    && locale-gen en_US.UTF-8; \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true);
 
 # Install ansible
 RUN pip install ansible
