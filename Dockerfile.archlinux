@@ -19,7 +19,9 @@ RUN pacman-key --init \
     && rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
     && locale-gen en_US.UTF-8; \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
-    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true);
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop NetworkManager.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable NetworkManager.service || true);
 
 # Install ansible
 RUN pip install ansible

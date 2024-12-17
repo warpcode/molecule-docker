@@ -32,8 +32,12 @@ RUN apt-get update \
     && rm -rf /lib/systemd/system/getty.target \
     && rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
     && locale-gen en_US.UTF-8; \
+    rm -rf /lib/systemd/system/multi-user.target.wants/*;\
+    rm -rf /etc/systemd/system/*.wants/*;\
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
-    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true);
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop NetworkManager.service || true); \
+    ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable NetworkManager.service || true);
 
 RUN sed -i 's/^\($ModLoad imklog\)/#\1/' /etc/rsyslog.conf
 
