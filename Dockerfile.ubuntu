@@ -30,8 +30,7 @@ RUN apt-get update \
     rm -Rf /var/lib/apt/lists/*; \
     rm -Rf /usr/share/doc; \
     rm -Rf /usr/share/manp; \
-    rm -rf /lib/systemd/system/multi-user.target.wants/*;\
-    rm -rf /etc/systemd/system/*.wants/*;\
+    rm -rf /etc/systemd/*/*.wants/*;\
     rm -rf /lib/systemd/system/systemd*udev*; \
     rm -rf /lib/systemd/system/getty.target; \
     rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \

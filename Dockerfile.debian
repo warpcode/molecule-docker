@@ -29,7 +29,7 @@ RUN apt-get update \
     rm -Rf /usr/share/man; \
     rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \
     rm -rf /lib/systemd/system/multi-user.target.wants/*;\
-    rm -rf /etc/systemd/system/*.wants/*;\
+    rm -rf /etc/systemd/*/*.wants/*;\
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true); \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop NetworkManager.service || true); \
