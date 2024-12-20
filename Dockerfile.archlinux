@@ -16,9 +16,8 @@ RUN pacman-key --init \
        $([ "$DESKTOP_INSTALL" == "1" ] && echo 'gnome') \
     && rm -rf /lib/systemd/system/systemd*udev* \
     && rm -rf /lib/systemd/system/getty.target \
-    rm -rf /etc/systemd/*/*.wants/*;\
-    rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED; \
-    locale-gen en_US.UTF-8; \
+    && rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED \
+    && locale-gen en_US.UTF-8; \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop gdm.service || true); \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl disable gdm.service || true); \
     ([ "$DESKTOP_INSTALL" = "1" ] && systemctl stop NetworkManager.service || true); \
