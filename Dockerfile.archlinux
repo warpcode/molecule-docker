@@ -18,7 +18,7 @@ RUN pacman-key --init \
 
 RUN rm -rf /lib/systemd/system/systemd*udev*; \
     rm -rf /lib/systemd/system/getty.target; \
-    rm -rf /usr/lib/python3.12/EXTERNALLY-MANAGED; \
+    rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \
     locale-gen en_US.UTF-8; \
     ([ "$DESKTOP_INSTALL" == "1" ] && systemctl stop gdm.service || true); \
     ([ "$DESKTOP_INSTALL" == "1" ] && systemctl disable gdm.service || true); \
