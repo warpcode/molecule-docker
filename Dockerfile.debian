@@ -22,9 +22,11 @@ RUN apt-get update \
        systemd \
        systemd-sysv \
        wget \
-       $([ "$DESKTOP_INSTALL" = "1" ] && echo 'task-gnome-desktop') \
-    && apt-get clean; \
-    rm -Rf /var/lib/apt/lists/*; \
+       $([ "$DESKTOP_INSTALL" = "1" ] && echo 'task-gnome-desktop'); \
+    apt-get remove -y snapd pipewire alsa; \
+    apt-get clean;
+
+RUN rm -Rf /var/lib/apt/lists/*; \
     rm -Rf /usr/share/doc; \
     rm -Rf /usr/share/man; \
     rm -rf /usr/lib/python3.*/EXTERNALLY-MANAGED; \

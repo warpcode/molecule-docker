@@ -13,10 +13,12 @@ RUN dnf -y update; \
         sudo \
         systemd \
         util-linux \
-        which \
-    && ([ "$DESKTOP_INSTALL" = "1" ] && dnf group -y install '@Basic Desktop' || true) \
-    && dnf clean all \
-    && (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
+        which; \
+    ([ "$DESKTOP_INSTALL" = "1" ] && dnf group -y install '@Basic Desktop' || true); \
+    dnf remove -y snapd pipewire alsa; \
+    dnf clean all;
+
+RUN (cd /lib/systemd/system/sysinit.target.wants/; for i in *; do [ $i == systemd-tmpfiles-setup.service ] || rm -f $i; done); \
     rm -rf /lib/systemd/system/multi-user.target.wants/*;\
     rm -rf /etc/systemd/system/*.wants/*;\
     rm -rf /lib/systemd/system/local-fs.target.wants/*; \
