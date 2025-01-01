@@ -11,7 +11,7 @@ RUN pacman-key --init \
         python \
         python-pip \
         sudo \
-        systemd \
+        systemd-sysvcompat \
         util-linux \
         $([ "$DESKTOP_INSTALL" == "1" ] && echo 'gnome'); \
         ([ "$DESKTOP_INSTALL" == "1" ] && pacman -Runs snapd pipewire alsa || true);
