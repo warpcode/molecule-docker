@@ -10,6 +10,8 @@ RUN apt-get update \
     && apt-get install -y $([ "$DESKTOP_INSTALL" = "0" ] && echo '--no-install-recommends') \
        apt-utils \
        build-essential \
+       curl \
+       wget \
        iproute2 \
        libffi-dev \
        libssl-dev \
